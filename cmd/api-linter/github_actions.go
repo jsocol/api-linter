@@ -32,8 +32,9 @@ func formatGitHubActionOutput(responses []lint.Response) []byte {
 			// https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-error-message
 
 			fmt.Fprintf(&buf, "::error file=%s", response.FilePath)
+			var location lint.FileLocation
 			if problem.Location != nil {
-				location := lint.FileLocationFromPBLocation(problem.Location, nil)
+				location = lint.FileLocationFromPBLocation(problem.Location, problem.Descriptor)
 				fmt.Fprintf(&buf, ",line=%d,col=%d,endLine=%d,endColumn=%d", location.Start.Line, location.Start.Column, location.End.Line, location.End.Column)
 			}
 
@@ -42,12 +43,18 @@ func formatGitHubActionOutput(responses []lint.Response) []byte {
 			// with two Armenian full stops which are indistinguishable to my eye.
 			runeThatLooksLikeTwoColonsButIsActuallyTwoArmenianFullStops := "։։"
 			title := strings.ReplaceAll(string(problem.RuleID), "::", runeThatLooksLikeTwoColonsButIsActuallyTwoArmenianFullStops)
-			message := strings.ReplaceAll(problem.Message, "\n", "\\n")
+			// message := strings.ReplaceAll(problem.Message, "\n", "\\n")
+			message := problem.Message
 			uri := problem.GetRuleURI()
 			if uri != "" {
-				message += "\\n\\n" + uri
+				message += "<br>" + uri
 			}
-			fmt.Fprintf(&buf, ",title=%s::%s\n", title, message)
+			fmt.Fprintf(&buf, ",title=%s::%s", title, message)
+			if problem.Location != nil {
+				fmt.Fprint(&buf, fmt.Sprintf("<br>line=%d, col=%d, endLine=%d, endCol=%d\n", location.Start.Line, location.Start.Column, location.End.Line, location.End.Column))
+			} else {
+				fmt.Fprintln(&buf, "<br>no location info found")
+			}
 		}
 	}
 
