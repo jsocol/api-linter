@@ -17,7 +17,7 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"strings"
+	"net/url"
 
 	"github.com/googleapis/api-linter/lint"
 )
@@ -32,28 +32,18 @@ func formatGitHubActionOutput(responses []lint.Response) []byte {
 			// https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-error-message
 
 			fmt.Fprintf(&buf, "::error file=%s", response.FilePath)
-			var location lint.FileLocation
 			if problem.Location != nil {
-				location = lint.FileLocationFromPBLocation(problem.Location, problem.Descriptor)
+				location := lint.FileLocationFromPBLocation(problem.Location, problem.Descriptor)
 				fmt.Fprintf(&buf, ",line=%d,col=%d,endLine=%d,endColumn=%d", location.Start.Line, location.Start.Column, location.End.Line, location.End.Column)
 			}
 
-			// GitHub uses :: as control characters (which are also used to delimit
-			// linter rules. In order to prevent confusion, replace the double colon
-			// with two Armenian full stops which are indistinguishable to my eye.
-			runeThatLooksLikeTwoColonsButIsActuallyTwoArmenianFullStops := "%3A%3A"
-			title := strings.ReplaceAll(string(problem.RuleID), "::", runeThatLooksLikeTwoColonsButIsActuallyTwoArmenianFullStops)
-			message := strings.ReplaceAll(problem.Message, "\n", "%0A")
+			title := url.QueryEscape(string(problem.RuleID))
+			message := problem.Message
 			uri := problem.GetRuleURI()
 			if uri != "" {
-				message += "%0A" + uri
+				message += "\n" + uri
 			}
-			fmt.Fprintf(&buf, ",title=%s::%s", title, message)
-			if problem.Location != nil {
-				fmt.Fprint(&buf, fmt.Sprintf("<br>line=%d, col=%d, endLine=%d, endCol=%d\n", location.Start.Line, location.Start.Column, location.End.Line, location.End.Column))
-			} else {
-				fmt.Fprintln(&buf, "%0Ano location info found")
-			}
+			fmt.Fprintf(&buf, ",title=%s::%s\n", title, url.QueryEscape(message))
 		}
 	}
 

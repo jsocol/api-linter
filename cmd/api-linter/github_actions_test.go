@@ -56,8 +56,8 @@ func TestFormatGitHubActionOutput(t *testing.T) {
 					},
 				},
 			},
-			want: `::error file=example.proto,line=6,col=7,endLine=8,endColumn=8,title=line։։col։։endLine։։endColumn::line, column, endline, and endColumn
-::error file=example.proto,line=6,col=7,endLine=6,endColumn=7,title=line։։col։։endLine::Line, column, and endline
+			want: `::error file=example.proto,line=6,col=7,endLine=8,endColumn=8,title=line%3A%3Acol%3A%3AendLine%3A%3AendColumn::line%2C+column%2C+endline%2C+and+endColumn
+::error file=example.proto,line=6,col=7,endLine=6,endColumn=7,title=line%3A%3Acol%3A%3AendLine::Line%2C+column%2C+and+endline
 `,
 		},
 		{
@@ -82,8 +82,8 @@ func TestFormatGitHubActionOutput(t *testing.T) {
 					},
 				},
 			},
-			want: `::error file=example.proto,line=2,col=3,endLine=4,endColumn=4,title=core։։naming_formats։։field_names::\n\nhttps://linter.aip.dev/naming_formats/field_names
-::error file=example.proto,line=6,col=7,endLine=8,endColumn=8,title=core։։naming_formats։։field_names::multi\nline\ncomment\n\nhttps://linter.aip.dev/naming_formats/field_names
+			want: `::error file=example.proto,line=2,col=3,endLine=4,endColumn=4,title=core%3A%3Anaming_formats%3A%3Afield_names::%0Ahttps%3A%2F%2Flinter.aip.dev%2Fnaming_formats%2Ffield_names
+::error file=example.proto,line=6,col=7,endLine=8,endColumn=8,title=core%3A%3Anaming_formats%3A%3Afield_names::multi%0Aline%0Acomment%0Ahttps%3A%2F%2Flinter.aip.dev%2Fnaming_formats%2Ffield_names
 `,
 		},
 		{
@@ -117,13 +117,13 @@ func TestFormatGitHubActionOutput(t *testing.T) {
 					},
 				},
 			},
-			want: `::error file=example.proto,title=core։։naming_formats։։field_names::\n\nhttps://linter.aip.dev/naming_formats/field_names
-::error file=example.proto,title=core։։naming_formats։։field_names::\n\nhttps://linter.aip.dev/naming_formats/field_names
-::error file=example2.proto,title=core։։0131։։request_message։։name::\n\nhttps://linter.aip.dev/131/request_message/name
-::error file=example2.proto,title=core։։0132։։response_message։։name::\n\nhttps://linter.aip.dev/132/response_message/name
-::error file=example3.proto,title=core։։naming_formats։։field_names::\n\nhttps://linter.aip.dev/naming_formats/field_names
-::error file=example4.proto,title=core։։naming_formats։։field_names::\n\nhttps://linter.aip.dev/naming_formats/field_names
-::error file=example4.proto,title=core։։0132։։response_message։։name::\n\nhttps://linter.aip.dev/132/response_message/name
+			want: `::error file=example.proto,title=core%3A%3Anaming_formats%3A%3Afield_names::%0Ahttps%3A%2F%2Flinter.aip.dev%2Fnaming_formats%2Ffield_names
+::error file=example.proto,title=core%3A%3Anaming_formats%3A%3Afield_names::%0Ahttps%3A%2F%2Flinter.aip.dev%2Fnaming_formats%2Ffield_names
+::error file=example2.proto,title=core%3A%3A0131%3A%3Arequest_message%3A%3Aname::%0Ahttps%3A%2F%2Flinter.aip.dev%2F131%2Frequest_message%2Fname
+::error file=example2.proto,title=core%3A%3A0132%3A%3Aresponse_message%3A%3Aname::%0Ahttps%3A%2F%2Flinter.aip.dev%2F132%2Fresponse_message%2Fname
+::error file=example3.proto,title=core%3A%3Anaming_formats%3A%3Afield_names::%0Ahttps%3A%2F%2Flinter.aip.dev%2Fnaming_formats%2Ffield_names
+::error file=example4.proto,title=core%3A%3Anaming_formats%3A%3Afield_names::%0Ahttps%3A%2F%2Flinter.aip.dev%2Fnaming_formats%2Ffield_names
+::error file=example4.proto,title=core%3A%3A0132%3A%3Aresponse_message%3A%3Aname::%0Ahttps%3A%2F%2Flinter.aip.dev%2F132%2Fresponse_message%2Fname
 `,
 		},
 	}
