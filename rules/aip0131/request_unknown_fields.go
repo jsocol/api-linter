@@ -20,6 +20,7 @@ import (
 	"bitbucket.org/creachadair/stringset"
 
 	"github.com/googleapis/api-linter/lint"
+	"github.com/googleapis/api-linter/locations"
 	"github.com/jhump/protoreflect/desc"
 )
 
@@ -38,6 +39,7 @@ var unknownFields = &lint.FieldRule{
 					string(field.GetName()),
 				),
 				Descriptor: field,
+				Location:   locations.DescriptorName(field),
 			}}
 		}
 
