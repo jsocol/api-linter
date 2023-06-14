@@ -41,7 +41,7 @@ func formatGitHubActionOutput(responses []lint.Response) []byte {
 			// GitHub uses :: as control characters (which are also used to delimit
 			// linter rules. In order to prevent confusion, replace the double colon
 			// with two Armenian full stops which are indistinguishable to my eye.
-			runeThatLooksLikeTwoColonsButIsActuallyTwoArmenianFullStops := "։։"
+			runeThatLooksLikeTwoColonsButIsActuallyTwoArmenianFullStops := "%3A%3A"
 			title := strings.ReplaceAll(string(problem.RuleID), "::", runeThatLooksLikeTwoColonsButIsActuallyTwoArmenianFullStops)
 			message := strings.ReplaceAll(problem.Message, "\n", "%0A")
 			uri := problem.GetRuleURI()
